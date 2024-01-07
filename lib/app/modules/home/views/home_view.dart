@@ -15,9 +15,19 @@ import 'package:ultimate_alarm_clock/app/modules/settings/controllers/theme_cont
 import 'package:ultimate_alarm_clock/app/utils/audio_utils.dart';
 import 'package:ultimate_alarm_clock/app/utils/constants.dart';
 import 'package:ultimate_alarm_clock/app/utils/utils.dart';
-
-import '../../settings/views/language_menu.dart';
+import 'package:home_widget/home_widget.dart';
 import '../controllers/home_controller.dart';
+
+// TO DO: Replace with your App Group ID
+const String appGroupId = '<YOUR APP GROUP>';
+const String androidWidgetName = 'NextAlarm';
+void updateWidget(String value) {
+  // Save the data to the widget
+  HomeWidget.saveWidgetData<String>('next_alarm', value);
+  HomeWidget.updateWidget(
+    androidName: androidWidgetName,
+  );
+}
 
 class HomeView extends GetView<HomeController> {
   HomeView({Key? key}) : super(key: key);
@@ -865,7 +875,7 @@ class HomeView extends GetView<HomeController> {
                                           () => GestureDetector(
                                             onTap: () {
                                               Utils.hapticFeedback();
-
+                                              updateWidget(controller.alarmTime.value.tr);
                                               // If multiple select mode is not on, then only you can update the alarm
                                               if (!controller
                                                   .inMultipleSelectMode.value) {

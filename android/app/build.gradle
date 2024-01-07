@@ -27,6 +27,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
+  compileSdkVersion 34
   compileSdkVersion rootProject.ext.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
@@ -63,6 +64,9 @@ android {
             shrinkResources true
             signingConfig signingConfigs.debug
         }
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
