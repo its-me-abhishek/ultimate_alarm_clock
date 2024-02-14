@@ -1,27 +1,19 @@
 package com.example.ultimate_alarm_clock
 
-import android.os.Bundle
-import androidx.annotation.NonNull
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.embedding.engine.FlutterEngineCache
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs
-import io.flutter.embedding.engine.dart.DartExecutor
-import io.flutter.plugins.GeneratedPluginRegistrant
-import io.flutter.plugin.common.MethodChannel
+import android.app.ActivityManager
 import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.SystemClock
-import android.app.ActivityManager
-import android.widget.Toast
-import android.os.PowerManager
-import android.util.Log
-import android.view.WindowManager
 import android.media.Ringtone
 import android.media.RingtoneManager
 import android.net.Uri
+import android.os.SystemClock
+import android.view.WindowManager
+import androidx.annotation.NonNull
+import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.engine.FlutterEngine
+import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
 
@@ -33,11 +25,13 @@ class MainActivity : FlutterActivity() {
         private var ringtone: Ringtone? = null
     }
 
-
-
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
+        window.addFlags(
+                WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON or
+                        WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED or
+                        WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+        )
         var methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
 
         val intent = intent
@@ -65,14 +59,18 @@ class MainActivity : FlutterActivity() {
             } else if (call.method == "bringAppToForeground") {
                 bringAppToForeground(this)
                 result.success(null)
-            } else if (call.method == "minimizeApp" ) {
+            } else if (call.method == "minimizeApp") {
                 minimizeApp()
-                result.success(null)   
+                result.success(null)
             } else if (call.method == "playDefaultAlarm") {
                 playDefaultAlarm(this)
                 result.success(null)
             } else if (call.method == "stopDefaultAlarm") {
                 stopDefaultAlarm()
+                result.success(null)
+            } else if (call.method == "setAlarmTime") {
+                val alarmTime = call.argument<String>("alarmTime")
+                println("Received alarm time from Flutter: $alarmTime")
                 result.success(null)
             } else {
                 result.notImplemented()
@@ -91,21 +89,20 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-
     private fun minimizeApp() {
         moveTaskToBack(true)
     }
 
-
     private fun scheduleAlarm(milliSeconds: Int) {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        )
+        val pendingIntent =
+                PendingIntent.getBroadcast(
+                        this,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                )
 
         // Schedule the alarm
         val triggerTime = SystemClock.elapsedRealtime() + milliSeconds
@@ -115,12 +112,13 @@ class MainActivity : FlutterActivity() {
     private fun cancelAllScheduledAlarms() {
         val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(this, AlarmReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(
-            this,
-            0,
-            intent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
-        )
+        val pendingIntent =
+                PendingIntent.getBroadcast(
+                        this,
+                        0,
+                        intent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                )
 
         // Cancel any existing alarms by providing the same pending intent
         alarmManager.cancel(pendingIntent)
