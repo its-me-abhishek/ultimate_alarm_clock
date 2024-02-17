@@ -30,6 +30,7 @@ import 'package:ultimate_alarm_clock/app/modules/settings/controllers/theme_cont
 import 'package:ultimate_alarm_clock/app/routes/app_pages.dart';
 import 'package:ultimate_alarm_clock/app/utils/constants.dart';
 import 'package:ultimate_alarm_clock/app/utils/utils.dart';
+import '../../home/controllers/home_controller.dart';
 import '../controllers/add_or_update_alarm_controller.dart';
 
 class AddOrUpdateAlarmView extends GetView<AddOrUpdateAlarmController> {
@@ -38,6 +39,7 @@ class AddOrUpdateAlarmView extends GetView<AddOrUpdateAlarmController> {
   ThemeController themeController = Get.find<ThemeController>();
   InputTimeController inputTimeController = Get.put(InputTimeController());
   SettingsController settingsController = Get.find<SettingsController>();
+  HomeController homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     var width = Get.width;
@@ -151,6 +153,10 @@ class AddOrUpdateAlarmView extends GetView<AddOrUpdateAlarmController> {
                       ),
                       onPressed: () async {
                         Utils.hapticFeedback();
+                        homeController.nextAlarmChannel.invokeMethod(
+                          'updateAlarmTime',
+                          homeController.alarmTime.value,
+                        );
                         if (controller.userModel.value != null) {
                           controller
                               .offsetDetails[controller.userModel.value!.id] = {

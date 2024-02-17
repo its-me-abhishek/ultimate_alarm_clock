@@ -26,6 +26,8 @@ class Pair<T, U> {
 
 class HomeController extends GetxController {
   MethodChannel alarmChannel = const MethodChannel('ulticlock');
+  MethodChannel nextAlarmChannel = const MethodChannel('nextAlarmChannel');
+
   Stream<QuerySnapshot>? firestoreStreamAlarms;
   Stream<QuerySnapshot>? sharedAlarmsStream;
   Stream? isarStreamAlarms;
@@ -567,7 +569,8 @@ class HomeController extends GetxController {
       content: Column(
         children: [
           Text(
-            'This action will permanently delete these alarms from your device.'.tr,
+            'This action will permanently delete these alarms from your device.'
+                .tr,
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
@@ -583,17 +586,13 @@ class HomeController extends GetxController {
                     Get.back();
                   },
                   style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all(kprimaryColor),
+                    backgroundColor: MaterialStateProperty.all(kprimaryColor),
                   ),
                   child: Text(
                     'Cancel'.tr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(
-                      color: kprimaryBackgroundColor,
-                    ),
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                          color: kprimaryBackgroundColor,
+                        ),
                   ),
                 ),
                 OutlinedButton(
@@ -613,7 +612,7 @@ class HomeController extends GetxController {
 
                     Get.offNamedUntil(
                       '/bottom-navigation-bar',
-                          (route) => route.settings.name == '/splash-screen',
+                      (route) => route.settings.name == '/splash-screen',
                     );
                   },
                   style: OutlinedButton.styleFrom(
@@ -626,14 +625,11 @@ class HomeController extends GetxController {
                   ),
                   child: Text(
                     'Okay'.tr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(
-                      color: themeController.isLightMode.value
-                          ? Colors.red.withOpacity(0.9)
-                          : Colors.red,
-                    ),
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                          color: themeController.isLightMode.value
+                              ? Colors.red.withOpacity(0.9)
+                              : Colors.red,
+                        ),
                   ),
                 ),
               ],
