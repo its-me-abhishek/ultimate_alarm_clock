@@ -1,19 +1,40 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Widget.Android.AppWidget.Container"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rounded_background"
     android:theme="@style/Theme.Android.AppWidgetContainer">
 
+    <!-- First TextView (label_next_alarm) -->
+    <TextView
+        android:id="@+id/label_next_alarm"
+        style="@style/Widget.Android.AppWidget.InnerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
+        android:text="@string/label_next_alarm"
+        android:textSize="18sp"
+        android:textColor="#b5ee5c"
+        android:textStyle="bold"
+        android:background="@drawable/rounded_background"
+        android:clipToOutline="true"/>
+
+    <!-- Second TextView (next_alarm_data) -->
     <TextView
         android:id="@+id/next_alarm_data"
         style="@style/Widget.Android.AppWidget.InnerView"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/label_next_alarm"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="8dp"
-        android:contentDescription="@string/next_alarm_data"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="0dp"
         android:text="@string/appwidget_text"
-        android:textSize="24sp"
-        android:textStyle="bold|italic" />
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:background="@drawable/rounded_background"
+        android:clipToOutline="true"/>
 </RelativeLayout>

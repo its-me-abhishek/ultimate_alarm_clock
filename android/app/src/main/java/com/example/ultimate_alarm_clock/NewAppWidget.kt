@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.widget.RemoteViews
 import es.antonborri.home_widget.HomeWidgetPlugin
+import es.antonborri.home_widget.HomeWidgetLaunchIntent
 
 /** Implementation of App Widget functionality. */
 class NewAppWidget : AppWidgetProvider() {
@@ -19,7 +20,16 @@ class NewAppWidget : AppWidgetProvider() {
             val views =
                     RemoteViews(context.packageName, R.layout.new_app_widget).apply {
                         val title = widgetData.getString("next_alarm_data", null)
-                        setTextViewText(R.id.next_alarm_data, title ?: "No Alarm Set")
+                        setTextViewText(R.id.label_next_alarm, "Next alarm")
+                        setTextViewText(R.id.next_alarm_data, title ?: "No upcoming alarms!")
+
+                        // Open App on Widget Click
+                        val pendingIntent =
+                                HomeWidgetLaunchIntent.getActivity(
+                                        context,
+                                        MainActivity::class.java
+                                )
+                        setOnClickPendingIntent(R.id.container_layout, pendingIntent)
                     }
 
             appWidgetManager.updateAppWidget(appWidgetId, views)
