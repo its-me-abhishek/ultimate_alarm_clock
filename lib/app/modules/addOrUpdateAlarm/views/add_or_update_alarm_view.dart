@@ -25,6 +25,7 @@ import 'package:ultimate_alarm_clock/app/modules/addOrUpdateAlarm/views/shared_a
 import 'package:ultimate_alarm_clock/app/modules/addOrUpdateAlarm/views/shared_users_tile.dart';
 import 'package:ultimate_alarm_clock/app/modules/addOrUpdateAlarm/views/snooze_duration_tile.dart';
 import 'package:ultimate_alarm_clock/app/modules/addOrUpdateAlarm/views/weather_tile.dart';
+import 'package:ultimate_alarm_clock/app/modules/home/controllers/home_controller.dart';
 import 'package:ultimate_alarm_clock/app/modules/settings/controllers/settings_controller.dart';
 import 'package:ultimate_alarm_clock/app/modules/settings/controllers/theme_controller.dart';
 import 'package:ultimate_alarm_clock/app/routes/app_pages.dart';
@@ -38,6 +39,7 @@ class AddOrUpdateAlarmView extends GetView<AddOrUpdateAlarmController> {
   ThemeController themeController = Get.find<ThemeController>();
   InputTimeController inputTimeController = Get.put(InputTimeController());
   SettingsController settingsController = Get.find<SettingsController>();
+  HomeController homeController = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     var width = Get.width;

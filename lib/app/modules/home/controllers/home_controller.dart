@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
+import 'package:home_widget/home_widget.dart';
 import 'package:intl/intl.dart';
 import 'package:rxdart/rxdart.dart' as rx;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -45,6 +46,8 @@ class HomeController extends GetxController {
   final RxBool isUserSignedIn = false.obs;
   final floatingButtonKey = GlobalKey<ExpandableFabState>();
   final floatingButtonKeyLoggedOut = GlobalKey<ExpandableFabState>();
+  String androidWidgetName = 'NewAppWidget';
+  String iOSWidgetName = 'NewAppWidget';
 
   final alarmIdController = TextEditingController();
 
@@ -61,6 +64,14 @@ class HomeController extends GetxController {
   Set<Pair<dynamic, bool>> selectedAlarmSet = {};
 
   ThemeController themeController = Get.find<ThemeController>();
+  void updateNextAlarm(String data) {
+    // Save the headline data to the widget
+    HomeWidget.saveWidgetData<String>('next_alarm_data', data);
+    HomeWidget.updateWidget(
+      iOSName: iOSWidgetName,
+      androidName: androidWidgetName,
+    );
+  }
 
   loginWithGoogle() async {
     // Logging in again to ensure right details if User has linked account
@@ -100,6 +111,7 @@ class HomeController extends GetxController {
   }
 
   initStream(UserModel? user) async {
+    updateNextAlarm(alarmTime.value);
     firestoreStreamAlarms = FirestoreDb.getAlarms(userModel.value);
     isarStreamAlarms = IsarDb.getAlarms();
     sharedAlarmsStream = FirestoreDb.getSharedAlarms(userModel.value);
@@ -211,7 +223,6 @@ class HomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-
     if (!isUserSignedIn.value) await loginWithGoogle();
 
     isSortedAlarmListEnabled.value = await SecureStorageProvider()
@@ -328,9 +339,11 @@ class HomeController extends GetxController {
               latestAlarm.days,
             );
             alarmTime.value = 'Rings in $timeToAlarm';
+            updateNextAlarm(alarmTime.value);
           });
         } else {
           alarmTime.value = 'No upcoming alarms!';
+          updateNextAlarm(alarmTime.value);
         }
       } else {
         await scheduleNextAlarm(
@@ -401,7 +414,7 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-
+    (alarmTime.value);
     if (delayToSchedule != null) {
       delayToSchedule!.cancel();
     }
@@ -567,7 +580,8 @@ class HomeController extends GetxController {
       content: Column(
         children: [
           Text(
-            'This action will permanently delete these alarms from your device.'.tr,
+            'This action will permanently delete these alarms from your device.'
+                .tr,
             style: Theme.of(context).textTheme.bodyMedium,
             textAlign: TextAlign.center,
           ),
@@ -583,17 +597,13 @@ class HomeController extends GetxController {
                     Get.back();
                   },
                   style: ButtonStyle(
-                    backgroundColor:
-                    MaterialStateProperty.all(kprimaryColor),
+                    backgroundColor: MaterialStateProperty.all(kprimaryColor),
                   ),
                   child: Text(
                     'Cancel'.tr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(
-                      color: kprimaryBackgroundColor,
-                    ),
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                          color: kprimaryBackgroundColor,
+                        ),
                   ),
                 ),
                 OutlinedButton(
@@ -613,7 +623,7 @@ class HomeController extends GetxController {
 
                     Get.offNamedUntil(
                       '/bottom-navigation-bar',
-                          (route) => route.settings.name == '/splash-screen',
+                      (route) => route.settings.name == '/splash-screen',
                     );
                   },
                   style: OutlinedButton.styleFrom(
@@ -626,14 +636,11 @@ class HomeController extends GetxController {
                   ),
                   child: Text(
                     'Okay'.tr,
-                    style: Theme.of(context)
-                        .textTheme
-                        .displaySmall!
-                        .copyWith(
-                      color: themeController.isLightMode.value
-                          ? Colors.red.withOpacity(0.9)
-                          : Colors.red,
-                    ),
+                    style: Theme.of(context).textTheme.displaySmall!.copyWith(
+                          color: themeController.isLightMode.value
+                              ? Colors.red.withOpacity(0.9)
+                              : Colors.red,
+                        ),
                   ),
                 ),
               ],
